@@ -113,15 +113,9 @@ export default {
     this.$emit("update:layout", DashboardLayout);
   },
   mounted() {
-    axios
-      .get("http://127.0.0.1:8000/api/todo", {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        this.todos = response.data.data;
-      });
+    axios.get("http://127.0.0.1:8000/api/todo").then((response) => {
+      this.todos = response.data.data;
+    });
   },
   data() {
     return {
@@ -184,11 +178,6 @@ export default {
       axios
         .delete(
           "http://127.0.0.1:8000/api/todo/" + this.taskId,
-          {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          },
           this.editedItem
         )
         .then((response) => {
@@ -219,15 +208,7 @@ export default {
         Object.assign(this.todos[this.editedIndex], this.editedItem);
 
         axios
-          .put(
-            "http://127.0.0.1:8000/api/todo/" + this.taskId,
-            this.editedItem,
-            {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            }
-          )
+          .put("http://127.0.0.1:8000/api/todo/" + this.taskId, this.editedItem)
           .then((response) => {
             this.snackbar = true;
             this.snackbarText = "Task Edited Successfully";
@@ -236,11 +217,7 @@ export default {
         this.todos.push(this.editedItem);
 
         axios
-          .post("http://127.0.0.1:8000/api/todo", this.editedItem, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          })
+          .post("http://127.0.0.1:8000/api/todo", this.editedItem)
           .then((response) => {
             this.snackbar = true;
             this.snackbarText = "Task Added Successfully";
