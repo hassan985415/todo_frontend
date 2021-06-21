@@ -219,15 +219,11 @@ export default {
         Object.assign(this.todos[this.editedIndex], this.editedItem);
 
         axios
-          .put(
-            "/todo/" + this.taskId,
-            this.editedItem,
-            {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            }
-          )
+          .put("/todo/" + this.taskId, this.editedItem, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
           .then((response) => {
             this.snackbar = true;
             this.snackbarText = "Task Edited Successfully";

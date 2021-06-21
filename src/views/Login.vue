@@ -74,7 +74,7 @@ export default {
   methods: {
     login() {
       axios
-        .post("http://127.0.0.1:8000/api/login", this.user)
+        .post("/login", this.user)
         .then((response) => {
           // console.warn(response.data.access_token.plainTextToken);
 

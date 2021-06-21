@@ -85,20 +85,18 @@ export default {
   },
   methods: {
     register() {
-      axios
-        .post("http://127.0.0.1:8000/api/register/", this.user)
-        .then((response) => {
-          // console.warn(response.data.access_token.plainTextToken);
-          if (response.status == 201) {
-            this.snackbar = true;
-            this.snackbarText = "Registered Successfully!";
-            localStorage.setItem(
-              "token",
-              response.data.access_token.plainTextToken
-            );
-            this.$router.push("/todo");
-          }
-        });
+      axios.post("/register/", this.user).then((response) => {
+        // console.warn(response.data.access_token.plainTextToken);
+        if (response.status == 201) {
+          this.snackbar = true;
+          this.snackbarText = "Registered Successfully!";
+          localStorage.setItem(
+            "token",
+            response.data.access_token.plainTextToken
+          );
+          this.$router.push("/todo");
+        }
+      });
     },
   },
 };
