@@ -113,9 +113,15 @@ export default {
     this.$emit("update:layout", DashboardLayout);
   },
   mounted() {
-    axios.get("/todo").then((response) => {
-      this.todos = response.data.data;
-    });
+    axios
+      .get("/todo", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        this.todos = response.data.data;
+      });
   },
   data() {
     return {
@@ -175,11 +181,21 @@ export default {
     deleteItemConfirm() {
       this.todos.splice(this.editedIndex, 1);
 
-      axios.delete("/todo/" + this.taskId, this.editedItem).then((response) => {
-        this.snackbar = true;
-        this.snackbarText = "Task Deleted Successfully";
-        this.closeDelete();
-      });
+      axios
+        .delete(
+          "/todo/" + this.taskId,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          },
+          this.editedItem
+        )
+        .then((response) => {
+          this.snackbar = true;
+          this.snackbarText = "Task Deleted Successfully";
+          this.closeDelete();
+        });
     },
 
     close() {
@@ -202,17 +218,33 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.todos[this.editedIndex], this.editedItem);
 
-        axios.put("/todo/" + this.taskId, this.editedItem).then((response) => {
-          this.snackbar = true;
-          this.snackbarText = "Task Edited Successfully";
-        });
+        axios
+          .put(
+            "/todo/" + this.taskId,
+            this.editedItem,
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          )
+          .then((response) => {
+            this.snackbar = true;
+            this.snackbarText = "Task Edited Successfully";
+          });
       } else {
         this.todos.push(this.editedItem);
 
-        axios.post("/todo", this.editedItem).then((response) => {
-          this.snackbar = true;
-          this.snackbarText = "Task Added Successfully";
-        });
+        axios
+          .post("/todo", this.editedItem, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((response) => {
+            this.snackbar = true;
+            this.snackbarText = "Task Added Successfully";
+          });
       }
       this.close();
     },
